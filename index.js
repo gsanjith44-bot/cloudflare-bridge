@@ -1,10 +1,24 @@
 
 export default {
   async fetch(request) {
-    const flaskURL = "https://mpu-4.onrender.com/activity";
+    const flaskBaseURL = "https://mpu-4.onrender.com";
 
     const url = new URL(request.url);
-    const targetURL = flaskURL + url.search;
+    const route = url.pathname;
+
+    const allowedRoutes = [
+      "/activity",
+      "/location",
+      "/device",
+      "/walking",
+      "/alert"
+    ];
+
+    if (!allowedRoutes.includes(route)) {
+      return new Response("Invalid route", { status: 404 });
+    }
+
+    const targetURL = flaskBaseURL + route + url.search;
 
     return fetch(targetURL, {
       method: request.method,
